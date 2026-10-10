@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevator DFA Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Elevator DFA Simulator</h1>
+  <p>A deterministic finite automaton you can ride. Press a floor and watch every state change.</p>
+</header>
+
+<main>
+  <section class="panel" aria-label="Elevator">
+    <h2>Elevator</h2>
+    <div class="car-wrap">
+      <div id="shaft"></div>
+      <div class="ctrl">
+        <div class="display"><span id="arrow">■</span><span id="floorNum">G</span></div>
+        <p id="status" class="status">Idle</p>
+        <div id="floorBtns" class="floors"></div>
+        <div class="two"><button data-in="OPEN_DOOR">Open door</button><button data-in="CLOSE_DOOR">Close door</button></div>
+        <div class="bar"><div id="bar"></div></div>
+      </div>
+    </div>
+    <div class="row-btns">
+      <button id="exampleBtn" class="primary">Run example</button>
+      <button id="stepBtn">Step</button>
+      <button id="autoBtn">Mode: Auto</button>
+      <button id="muteBtn">Sound: on</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+    <p id="hint" class="muted"></p>
+  </section>
+
+  <section class="panel" aria-label="DFA state">
+    <h2>Current DFA state</h2>
+    <p class="big" id="curState"></p>
+    <p id="acc"></p>
+    <p class="muted">Transitions executed: <b id="count">0</b></p>
+    <p class="muted">Input string so far: <code id="word"></code></p>
+    <h3>Latest transition</h3>
+    <p id="last" class="last"></p>
+    <h3>Input lab</h3>
+    <div class="two"><select id="inputSel"></select><button id="applyBtn" class="primary">Apply input</button></div>
+    <p class="muted">Pick any symbol from Σ. Every symbol has a defined result in every state.</p>
+  </section>
+
+  <section class="panel wide" aria-label="State diagram">
+    <h2>State diagram</h2>
+    <p class="muted">Each node is a phase that groups the floor-specific states (see "Learn" below). Arrows are generated from the real transition table. Double circle = accepting.</p>
+    <svg id="diagram" viewBox="0 0 700 400" role="img" aria-label="DFA state diagram"></svg>
+  </section>
+
+  <section class="panel" aria-label="Transition table">
+    <h2>Transition table</h2>
+    <div class="scroll"><table><thead><tr><th>Current</th><th>Input</th><th>Next</th><th>Explanation</th></tr></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+
+  <section class="panel" aria-label="Event log">
+    <h2>Event log</h2>
+    <button id="clearBtn">Clear log</button>
+    <ol id="log" class="log"></ol>
+  </section>
+
+  <section class="panel wide" aria-label="Learn">
+    <h2>Learn the DFA behind the elevator</h2>
+    <p>A <b>DFA</b> reads inputs one at a time. In each state, each input leads to exactly one next state. Formally: <code>M = (Q, Σ, δ, q₀, F)</code></p>
+    <dl>
+      <dt>Q: states</dt><dd>Each state combines a phase (IDLE, MOVING_UP, MOVING_DOWN, ARRIVED, DOOR_OPEN) with the floor, and while moving, the destination: for example <code>MOVING_UP[1→3]</code>. With 6 floors that gives <b id="nStates"></b> states, so the model really is finite.</dd>
+      <dt>Σ: alphabet</dt><dd><b id="nSigma"></b> symbols: <code>SELECT_0</code> to <code>SELECT_5</code>, <code>FLOOR_REACHED</code> (sensor sees the next floor), <code>OPEN_DOOR</code>, <code>CLOSE_DOOR</code>.</dd>
+      <dt>δ: transition function</dt><dd>A lookup table from (state, symbol) to the next state. Inputs that make no sense in a state, like opening doors while moving, send the DFA back to the same state (a self-loop), so δ is defined everywhere.</dd>
+      <dt>q₀: initial state</dt><dd><code>IDLE[0]</code>: the car waits at the ground floor with no request.</dd>
+      <dt>F: accepting states</dt><dd>All <code>DOOR_OPEN[f]</code> states. An input string is accepted if it ends with the doors open at a stopped floor, which is how a valid trip ends. Other operational states (moving, idle) are not accepting.</dd>
+    </dl>
+    <p class="muted">Abstraction: real elevators have more floors, queued requests and weight sensors. This model serves one request at a time.</p>
+    <h3>Quiz</h3>
+    <div id="quiz"></div>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
