@@ -204,25 +204,10 @@ function reset() {
   render(null, null, current); scheduleInternal();
 }
 
-// ---------- Quiz ------------------------------------------------------
-const QUIZ = [
-  { q: 'The elevator is in IDLE[0]. What does the input SELECT_3 lead to?', o: ['MOVING_UP[0→3]', 'ARRIVED[3]', 'IDLE[0]'], a: 0, e: 'Floor 3 is above floor 0, so the DFA goes to a MOVING_UP state that remembers the destination.' },
-  { q: 'In MOVING_UP[1→3], the input OPEN_DOOR is applied. What happens?', o: ['Doors open', 'State stays the same (self-loop)', 'Error: no transition'], a: 1, e: 'A DFA needs a transition for every state/input pair. Here the defined answer is to stay put.' },
-  { q: 'Which is the initial state q₀?', o: ['DOOR_OPEN[0]', 'IDLE[0]', 'ARRIVED[0]'], a: 1, e: 'The elevator starts parked at the ground floor with no pending request.' },
-  { q: 'Why is IDLE not an accepting state?', o: ['It is not a real state', 'Accepting means "doors open at a stopped floor", which marks a completed trip', 'Accepting states must be moving'], a: 1, e: 'Accepting states are a choice we make to recognise valid input strings; not every operational state qualifies.' }
-];
-function buildQuiz() {
-  $('quiz').innerHTML = QUIZ.map((x, i) => `<div class="q"><p>${i + 1}. ${x.q}</p>${x.o.map((t, j) => `<button data-q="${i}" data-o="${j}">${t}</button>`).join('')}<p class="fb" id="fb${i}"></p></div>`).join('');
-}
-
 // ---------- Events ----------------------------------------------------
 document.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.in) dispatch(b.dataset.in);
-  if (b.dataset.q) {
-    const x = QUIZ[b.dataset.q], ok = +b.dataset.o === x.a, fb = $('fb' + b.dataset.q);
-    fb.textContent = (ok ? 'Correct. ' : 'Not quite. ') + x.e; fb.className = 'fb ' + (ok ? 'yes' : 'no');
-  }
 });
 $('applyBtn').onclick = () => dispatch($('inputSel').value);
 $('stepBtn').onclick = () => { const n = internalInput(current); if (n) dispatch(n); };
@@ -235,4 +220,4 @@ $('exampleBtn').onclick = () => { reset(); auto = true; $('autoBtn').textContent
 // Static numbers in the learning section come from the real model
 $('nStates').textContent = Object.keys(STATE_INFO).length;
 $('nSigma').textContent = ALPHABET.length;
-buildShaft(); buildDiagram(); buildTable(); buildQuiz(); reset();
+buildShaft(); buildDiagram(); buildTable(); reset();
