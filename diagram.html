@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevator State Diagram - Joreese Clyde R. Manginsay</title><link rel="stylesheet" href="diagram.css"></head>
+<body>
+<header><h1>Elevator State Diagram</h1><p><a href="index.html">← Back to simulator</a></p></header>
+<main>
+<section class="panel">
+ <svg id="diagram" viewBox="0 0 700 400" role="img" aria-label="DFA state diagram"></svg>
+ <div class="btns" id="btns"></div>
+ <div class="btns"><select id="ex"></select><button id="runBtn" class="primary">Run string</button><button id="resetBtn">Reset</button></div>
+</section>
+<section class="panel">
+ <p class="big">State: <span id="cur">q0</span> <span id="nm" class="muted"></span></p>
+ <p class="muted">String: <code id="word"></code></p>
+ <p>Result: <b id="result"></b></p>
+ <p id="last" class="last">Press U, D, A, O or C.</p>
+ <p class="muted">Double circle = accepting state. Click the buttons to move through the diagram.</p>
+</section>
+</main>
+<script src="diagram.js"></script></body></html>
