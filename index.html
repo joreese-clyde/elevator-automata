@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Elevator Control System - Joreese Clyde Manginsay</title><link rel="stylesheet" href="style.css"></head>
+<title>Elevator DFA - Joreese Clyde Manginsay</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header><h1>Elevator Control System - Joreese Clyde R. Manginsay</h1>
-<p>DFA M = (Q, Σ, δ, q0, F) &nbsp;·&nbsp; <a href="diagram.html">Open state diagram →</a></p></header>
+<header><h1>Elevator DFA - Joreese Clyde R. Manginsay</h1>
+<p>M = (Q, Σ, δ, q0, F) with one start state and one final state</p></header>
 <main>
 <section class="panel"><h2>Elevator</h2>
  <div class="car-wrap"><div id="shaft"></div>
   <div class="ctrl">
    <div class="display"><span id="arrow">■</span><span id="floorNum">G</span></div>
-   <p id="status" class="status">Idle</p>
+   <p id="status" class="status">Standby, door closed</p>
+   <p id="hint" class="muted center"></p>
    <div id="floorBtns" class="floors"></div>
-   <div class="two"><button data-sym="O">Open door (O)</button><button data-sym="C">Close door (C)</button></div>
+   <div class="two"><button data-sym="0">Open door (0)</button><button data-sym="1">Close door (1)</button></div>
   </div></div>
- <div class="row-btns"><button id="exampleBtn" class="primary">Run example</button><button id="resetBtn">Reset</button></div>
+ <div class="row-btns"><button id="resetBtn">Reset</button></div>
 </section>
-<section class="panel"><h2>Current DFA state</h2>
+<section class="panel"><h2>Current state</h2>
  <p class="big" id="curState">q0</p><p id="acc"></p>
  <p class="muted">Input string: <code id="word"></code></p>
  <p class="muted">Result: <b id="result"></b></p>
  <h3>Latest transition</h3><p id="last" class="last">No input yet.</p>
- <h3>Input lab</h3>
- <div class="two"><select id="inputSel"><option value="U">U – floor above</option><option value="D">D – floor below</option><option value="A">A – reached floor</option><option value="O">O – open door</option><option value="C">C – close door</option></select><button id="applyBtn" class="primary">Apply</button></div>
+ <h3>Run a string</h3>
+ <div class="two"><input id="strIn" value="0130" maxlength="30" aria-label="Input string"><button id="runBtn" class="primary">Run</button></div>
+ <p id="err" class="muted">Symbols: 0, 1, 2, 3, 4, G.</p>
+</section>
+<section class="panel wide"><h2>State diagram</h2>
+ <svg id="diagram" viewBox="0 0 700 450" role="img" aria-label="Elevator DFA state diagram"></svg>
+ <p class="muted">Double circle = the single final state. The arrow marked start enters the single start state.</p>
+</section>
+<section class="panel"><h2>Alphabet Σ</h2>
+ <table><tbody><tr><td>0</td><td>Open door</td></tr><tr><td>1</td><td>Close door</td></tr><tr><td>2</td><td>Floor 2</td></tr><tr><td>3</td><td>Floor 3</td></tr><tr><td>4</td><td>Floor 4</td></tr><tr><td>G</td><td>Ground floor</td></tr></tbody></table>
+ <h3>Rule</h3>
+ <p class="muted">To go to any floor: open the door first (0), close it (1), then choose the floor. After arriving, the elevator waits for the door to open again.</p>
 </section>
 <section class="panel"><h2>State table δ</h2>
- <table><thead><tr><th>δ</th><th>U</th><th>D</th><th>A</th><th>O</th><th>C</th></tr></thead><tbody id="tbody"></tbody></table>
- <p class="muted">q0 = IDLE · q1 = MOVING_UP · q2 = MOVING_DOWN · q3 = ARRIVED · q4 = DOOR_OPEN (accepting)</p>
+ <table><thead><tr><th>δ</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>G</th></tr></thead><tbody id="tbody"></tbody></table>
+ <p class="muted">q0 = STANDBY (start) · q1 = DOOR_OPEN (final) · q2 = READY</p>
 </section>
-<section class="panel"><h2>Event log</h2><button id="clearBtn">Clear log</button><ol id="log" class="log"></ol></section>
+<section class="panel wide"><h2>Event log</h2><button id="clearBtn">Clear log</button><ol id="log" class="log"></ol></section>
 </main>
 <script src="script.js"></script></body></html>
